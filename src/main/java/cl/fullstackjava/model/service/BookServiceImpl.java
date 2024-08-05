@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
 		if(book!=null) {
 			book.setTitle(updatedBook.getTitle());
 			book.setAuthor(updatedBook.getAuthor());
-			book.setAvaible(updatedBook.isAvaible());
+			//book.setAvaible(updatedBook.isAvaible());
 		}
 		LOG.info("Actualizando el libro: {}", book.getTitle());
 		return book;
