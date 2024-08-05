@@ -1,0 +1,29 @@
+<div th:fragment="nav">
+	<nav class="navbar navbar-expand-md bg-body-tertiary">
+		<div class="container">
+			<a class="navbar-brand" th:href="@{/}">Library</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+				aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" th:href="@{/loans/catalog}">Catalog</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link  active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+							aria-expanded="false">
+							Admin
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="dropdown-item" th:href="@{/books}">Book Admin</a></li>
+							<li><a class="dropdown-item" th:href="@{/users}">User Management</a></li>
+							<li><a class="dropdown-item" th:href="@{/loans/history}">Loan History</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>

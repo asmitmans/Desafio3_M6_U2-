@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Library</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body class="bg-dark text-white">
+	<div th:replace="~{navbar :: nav}"></div>
+	<div class="container">
+		<h1>Books Catalog</h1>
+		
+		<form th:action="@{/loans/catalog/search}" method="get" class="mb-4">
+			<div class="input-group">
+				<input type="text" class="form-control bg-dark text-light" name="query" placeholder="Search by title or author" th:value="${query}">
+				<input type="hidden" name="selectedBookId" id="selectedBookId" th:value="${selectedBook != null} ? ${selectedBook.getId()} : 0">
+				<button class="btn btn-outline-primary" type="submit">Search</button>
+			</div>
+		</form>
+		
+		<div class="border border-light p-4 border-opacity-10">
+			<table class="table table-dark table-striped table-bordered">
+				<thead>
+					<tr class="thead-dark">
+						<th>ID</th>
+						<th>Title</th>
+						<th>Author</th>
+						<th>Availability</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="b : ${books}">
+						<th th:text="${b.getId()}"></th>
+						<td th:text="${b.getTitle()}"></td>
+						<td th:text="${b.getAuthor()}"></td>
+						<td th:text="${b.isAvaible()} ? 'Available' : 'Not Available'"></td>
+						<td>
+							<button th:if="${b.isAvaible()}" th:attr="onclick='selectBook(' + ${b.getId()} + ')'" class="btn btn-outline-primary">Select</button>
+							<form th:action="@{/loans/catalog/return}" method="post" class="d-inline" th:unless="${b.isAvaible()}">
+								<input type="hidden" name="bookId" th:value="${b.getId()}" />
+								<button type="submit" class="btn btn-outline-secondary">Return</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="border border-light p-4 border-opacity-10 mt-4" th:if="${selectedBook != null}">
+			<h2>Loan Book</h2>
+			<form th:action="@{/loans/catalog/loan}" method="post" class="mb-4">
+				<input type="hidden" name="bookId" th:value="${selectedBook.getId()}" />
+				<div class="mb-3">
+					<label class="form-label">Title:</label>
+					<input type="text" class="form-control bg-dark text-white" th:value="${selectedBook.getTitle()}" readonly>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">Author:</label>
+					<input type="text" class="form-control bg-dark text-white" th:value="${selectedBook.getAuthor()}" readonly>
+				</div>
+				<div class="mb-3">
+					<label for="userId" class="form-label">User ID:</label>
+					<input type="number" id="userId" name="userId" class="form-control bg-dark text-white no-spinner" required>
+				</div>
+				<div class="d-flex justify-content-end">
+					<a href="/loans/catalog" class="btn btn-outline-secondary me-2">Cancel</a>
+					<button type="submit" class="btn btn-outline-primary">Loan</button>
+				</div>
+				<div th:if="${errorMessage}" class="alert alert-danger mt-2" role="alert">
+					<span th:text="${errorMessage}"></span>
+				</div>
+			</form>
+		</div>
+		
+	</div>
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous">
+	</script>
+	
+	<script>
+		function selectBook(bookId) {
+			const query = document.querySelector('input[name="query"]').value;
+			window.location.href = '/loans/catalog/search?selectedBookId=' + bookId + '&query=' + encodeURIComponent(query);
+		}
+	</script>
+		
+</body>
+</html>
